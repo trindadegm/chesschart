@@ -49,6 +49,7 @@ int CCH_list_piece_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_
 // CCH_Piece
 //  -> The piece to be analized
 //
+// Returns 1 if a piece IS BLACK.
 // This information is quite useful on lots of procedures, it gives crucial information,
 // so it was placed in a procedure of its own.
 //
@@ -58,8 +59,8 @@ int CCH_list_piece_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_
 //    even thought it is not WHITE either.
 //
 // Return values (int)
-// 0: The piece (CCH_Piece p) is not WHITE
-// 1: The piece (CCH_Piece p) is WHITE
+// 0: The piece (CCH_Piece p) is not BLACK
+// 1: The piece (CCH_Piece p) is BLACK
 int CCH_is_black(CCH_Piece p);
 
 // CCH_is_white
@@ -68,6 +69,7 @@ int CCH_is_black(CCH_Piece p);
 // CCH_Piece
 //  -> The piece to be analized
 //
+// Returns 1 if a piece IS WHITE
 // This information is quite useful on lots of procedures, it gives crucial information,
 // so it was placed in a procedure of its own.
 //
@@ -81,7 +83,25 @@ int CCH_is_black(CCH_Piece p);
 // 1: The piece (CCH_Piece p) is WHITE
 int CCH_is_white(CCH_Piece p);
 
-// TODO DOCUMENT
+// CCH_same_color
+//
+// Arguments:
+// CCH_Piece pa
+//  -> First piece to be compared
+// CCH_Piece pb
+//  -> Second piece to be compared
+//
+// Returns 1 if 'pa' (CCH_Piece) and 'pb' (CCH_Piece) are of the same color, that means,
+// if BOTH are white or BOTH are black.
+//
+// NOTES:
+//    If either 'pa' (CCH_Piece) or 'pb' (CCH_Piece) (or both) are equal to 'CCH_NO_PIECE',
+//    this procedure will return 0.
+//
+// Return values (int)
+// 1: The pieces (CCH_Piece pa and CCH_Piece pb) are of the same color.
+// 0: The pieces (CCH_Piece pa and CCH_Piece pb) are of different colors
+//    OR either one (or both) of them is 'CCH_NO_PIECE'
 int CCH_same_color(CCH_Piece pa, CCH_Piece pb);
 
 #endif // INCLUDE_CCH_MECHANICS_H_

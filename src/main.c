@@ -34,7 +34,7 @@ int main(void)
   for (int i = 0; i < CCH_MAX_PIECE_MOVEMENTS; ++i)
   {
     if (moves[i].to.x == -1 && moves[i].to.y == -1) break;
-    printf("%d %d %d %d\n", moves[i].from.x, moves[i].from.y, moves[i].to.x, moves[i].to.y);
+    printf("%d %d :: %d %d\n", moves[i].from.x, moves[i].from.y, moves[i].to.x, moves[i].to.y);
   }
 
   return 0;

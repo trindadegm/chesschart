@@ -65,8 +65,9 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
   if (CCH_is_white(state->board[x][y]))
   {
     mv = (CCH_Move) {{x, y}, {x, y+1}};
-    if (mv.to.y < 8) // If pawn is moving INBOUNDS
+    if (mv.to.y < 8) // If pawn is moving INBOUNDS one step
     { 
+      // FOWARD MOVING
       it += CCH_take_place_if_allowed(state, &mv, it, moves); // Try to move foward
 
       if (y == 1 // May move twice and
@@ -93,12 +94,13 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
           moves[it++] = mv;
         }
       }
-    } // End of if pawn is moving INBOUNDS
+
+    } // End of if pawn is moving INBOUNDS one step
   } // End of if it is a white pawn
   else // It is a black pawn (if it is a pawn it can't be no piece
   {
     mv = (CCH_Move) {{x, y}, {x, y-1}};
-    if (mv.to.y > -1) // If pawn is moving INBOUNDS
+    if (mv.to.y > -1) // If pawn is moving INBOUNDS one step
     { 
       it += CCH_take_place_if_allowed(state, &mv, it, moves); // Try to move foward
 
@@ -126,7 +128,7 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
           moves[it++] = mv;
         }
       }
-    } // End of if pawn is moving INBOUNDS
+    } // End of if pawn is moving INBOUNDS one step
   } // End of else (it is a black pawn)
 
   if (it < CCH_MAX_PIECE_MOVEMENTS)
@@ -171,6 +173,13 @@ int CCH_take_place_if_allowed(const CCH_State* state, const CCH_Move* mv, int mo
 }
 
 // Documentation in CCH_mechanics.h
+int CCH_same_color(CCH_Piece pa, CCH_Piece pb)
+{
+  return ((pa > CCH_NO_PIECE && pb > CCH_NO_PIECE)
+          || (pa < CCH_NO_PIECE && pb < CCH_NO_PIECE));
+}
+
+// Documentation in CCH_mechanics.h
 int CCH_is_white(CCH_Piece p)
 {
   if (p < CCH_NO_PIECE)
@@ -181,13 +190,6 @@ int CCH_is_white(CCH_Piece p)
   {
     return 0;
   }
-}
-
-// Documentation in CCH_mechanics.h
-int CCH_same_color(CCH_Piece pa, CCH_Piece pb)
-{
-  return ((pa > CCH_NO_PIECE && pb > CCH_NO_PIECE)
-          || (pa < CCH_NO_PIECE && pb < CCH_NO_PIECE));
 }
 
 // Documentation in CCH_mechanics.h
