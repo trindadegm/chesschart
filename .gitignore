@@ -7,6 +7,9 @@
 *.obj
 *.elf
 
+# Text editor hidden files
+*.swp
+
 # Linker output
 *.ilk
 *.map
