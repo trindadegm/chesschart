@@ -13,6 +13,10 @@ int CCH_list_rook_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_M
 int CCH_list_queen_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
 int CCH_list_king_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
 
+
+// TODO ADD EN PASSANT CAPTURE ON PANW MOVES!
+
+int CCH_is_position_inbounds(CCH_Point pos);
 int CCH_take_place_if_allowed(const CCH_State*, const CCH_Move*, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
 
 // Documentation in CCH_mechanics.h
@@ -55,6 +59,7 @@ int CCH_list_piece_moves(const CCH_State* state, int x, int y, CCH_Move moves[CC
   }
 }
 
+// Documentation on the heading of this file
 int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
   int it = 0;
@@ -62,7 +67,7 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
   assert((x > 0 && y > 0)); // ASSERTION
 
   CCH_Move mv;
-  if (CCH_is_white(state->board[x][y]))
+  if (CCH_is_white(state->board[x][y])) // If the pawn is white, then
   {
     mv = (CCH_Move) {{x, y}, {x, y+1}};
     if (mv.to.y < 8) // If pawn is moving INBOUNDS one step
@@ -94,10 +99,9 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
           moves[it++] = mv;
         }
       }
-
     } // End of if pawn is moving INBOUNDS one step
   } // End of if it is a white pawn
-  else // It is a black pawn (if it is a pawn it can't be no piece
+  else // It is a black pawn (if it is a pawn it can't be no piece)
   {
     mv = (CCH_Move) {{x, y}, {x, y-1}};
     if (mv.to.y > -1) // If pawn is moving INBOUNDS one step
@@ -131,33 +135,94 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
     } // End of if pawn is moving INBOUNDS one step
   } // End of else (it is a black pawn)
 
-  if (it < CCH_MAX_PIECE_MOVEMENTS)
-  {
-    // End of array prematurely
-    moves[it] = (CCH_Move) {{-1, -1}, {-1, -1}};
-  }
+  // End of array prematurely (pawn can't move that much at all, so it WILL end prematurely)
+  moves[it] = (CCH_Move) {{-1, -1}, {-1, -1}};
+
+  return 0;
 } // End of CCH_list_pawn_moves
 
+// Documentation on the heading of this file
 int CCH_list_knight_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
+  // The knight can move to a maximum of 8 points. those could be put as:
+  //  -> x+2 and y+1
+  //  -> x+1 and y+2
+  //  -> x+2 and y-1
+  //  -> x+1 and y-2
+  //  -> x-2 and y+1
+  //  -> x-1 and y+2
+  //  -> x-2 and y-1
+  //  -> x-1 and y-2
+  //
+  // This explains everything about the logic of this procedure.
+  // Take a board and try it if you have any doubts.
+  int it = 0;  
+  CCH_Move mv = (CCH_Move) {{x, y}, {x+2, y+1}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x+1, y+2}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x+2, y-1}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x+1, y-2}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x-2, y+1}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x-1, y+2}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x-2, y-1}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+  mv = (CCH_Move) {{x, y}, {x-1, y-2}};
+  if (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  {
+    it += CCH_take_place_if_allowed(state, &mv, it, moves);
+  }
+
+  moves[it] = (CCH_Move) {{-1, -1}, {-1, -1}};
+  return 0;
 }
 
+// Documentation on the heading of this file
 int CCH_list_bishop_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
 }
 
+// Documentation on the heading of this file
 int CCH_list_rook_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
 }
 
+// Documentation on the heading of this file
 int CCH_list_queen_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
 }
 
+// Documentation on the heading of this file
 int CCH_list_king_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
 }
 
+// Documentation on the heading of this file
 int CCH_take_place_if_allowed(const CCH_State* state, const CCH_Move* mv, int movesAt, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
   // Can't move if they have the same color
@@ -170,6 +235,12 @@ int CCH_take_place_if_allowed(const CCH_State* state, const CCH_Move* mv, int mo
   {
     return 0;
   }
+}
+
+// Documentation on the heading of this file
+int CCH_is_position_inbounds(CCH_Point pos)
+{
+  return (pos.x > -1 && pos.x < 8 && pos.y > -1 && pos.y < 8);
 }
 
 // Documentation in CCH_mechanics.h
