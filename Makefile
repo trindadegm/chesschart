@@ -43,7 +43,7 @@ $(BinDir)/$(Bin): $(Objects)
 
 # Compiling each file
 $(BuildDir)/%.o: $(SourceDir)/%.$(SourceExt)
-	@mkdir -p build
+	@mkdir -p $(@D)
 	$(CC) $(CFlags) $(Libs) -I $(IncludeDir) -c $< -o $@
 
 # Creates auto-dependencies of files
