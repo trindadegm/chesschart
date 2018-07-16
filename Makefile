@@ -38,10 +38,12 @@ Deps := $(patsubst $(BuildDir)/%.o, $(DepsDir)/%.d, $(Objects))
 
 # Making the bin depends on the objects
 $(BinDir)/$(Bin): $(Objects)
+	@mkdir -p bin
 	$(CC) $(Objects) -o $(BinDir)/$(Bin) 
 
 # Compiling each file
 $(BuildDir)/%.o: $(SourceDir)/%.$(SourceExt)
+	@mkdir -p build
 	$(CC) $(CFlags) $(Libs) -I $(IncludeDir) -c $< -o $@
 
 # Creates auto-dependencies of files
