@@ -36,6 +36,10 @@
 //    (CCH_State*) is not NULL or if the move array
 //    (CCH_Move[CCH_MAX_PIECE_MOVEMENTS]) is an adequate reference.
 //
+//    When the position selected hold CCH_NO_PIECE, it will do NOTHING,
+//    meaning that the movement array will be unmodified and possible
+//    contain just memmory trash.
+//
 // Return values (int)
 // 0: Success.
 // 1: Warning: There was an attempt to move no piece (CCH_NO_PIECE: Piece)

@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 // This is defined for easy modifications later
-typedef CCH_Move_Coordinate short;
+typedef short CCH_Move_Coordinate;
 
 // This defines all the possible values of a CHESS PIECE,
 // assuming that they will not change anytime soon.

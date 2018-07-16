@@ -29,7 +29,7 @@ int main(void)
 
   CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS];
 
-  CCH_list_piece_moves(&state, 4, 1, moves);
+  CCH_list_piece_moves(&state, 4, 4, moves);
 
   for (int i = 0; i < CCH_MAX_PIECE_MOVEMENTS; ++i)
   {
