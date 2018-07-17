@@ -9,3 +9,8 @@
 ### Version 0.0.2
  - Minor fixes to legibility.
  - Implementation of pawn moves
+ - Implementation of knight moves
+ - Implementation of bishop moves
+ - Implementation of rook moves
+ - Implementation of queen moves
+ - Implementation of king moves
