@@ -3,9 +3,11 @@
 #include <CCH/CCH_definitions.h>
 #include <CCH/CCH_mechanics.h>
 
+#include <terminal_interface.h>
+
 int main(void)
 {
-  printf("ChessChart v0.0.2\n");  
+  printf("ChessChart v0.1.0\n\n");  
 
   CCH_State state;
 
@@ -40,14 +42,11 @@ int main(void)
     {.next = NULL}};
 
   CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS];
-
   CCH_list_piece_moves(&state, 4, 4, moves);
 
-  for (int i = 0; i < CCH_MAX_PIECE_MOVEMENTS; ++i)
-  {
-    if (moves[i].to.x == -1 && moves[i].to.y == -1) break;
-    printf("%d %d :: %d %d\n", moves[i].from.x, moves[i].from.y, moves[i].to.x, moves[i].to.y);
-  }
+  print_state_board(&state);
 
+  // Fix the terminal color even if everything else goes wrong
+  printf("\x1b[0m");
   return 0;
 }

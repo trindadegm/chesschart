@@ -23,7 +23,7 @@ BinDir := bin
 DepsDir := deps
 
 # The compiler flags
-CFlags := -g
+CFlags := -g -Wall
 # The libs to link
 Libs := -lpthread
 
