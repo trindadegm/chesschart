@@ -42,15 +42,6 @@ typedef enum CCH_Player
   CCH_BLACKS
 } CCH_Player;
 
-typedef struct CCH_State
-{
-  CCH_Piece board[8][8];
-  CCH_Player player;
-  int round;
-  bool whiteRock;
-  bool blackRock;
-} CCH_State;
-
 // This defines a point on the board, the x coordinate corresponds to the letter on the
 // standart chess notation (the column) and the y corresponds to the number on the
 // standart chess notation (the row). They are defined as CCH_Move_Coordinate, which is
@@ -72,5 +63,37 @@ typedef struct CCH_Move
   CCH_Point from;
   CCH_Point to;
 } CCH_Move;
+
+// This defines a linked list of moves
+typedef struct CCH_Move_List
+{
+  CCH_Move move;
+  struct CCH_Move_List* next;
+}CCH_Move_List;
+
+// This defines the state of the game, information about rocks and king movement is mandatory
+// because some movements are unavailable when some things happen on the game, even if
+// the pieces are on the position required, the previous events still matter. Also, there
+// may be made necessary to see all the movements required to get on this state, so those
+// would be on a linked list.
+//
+// The move linked list makes the existence of the bools for rock and king movement redundant,
+// as the list could be used to track back the events and discover any event of the game. But
+// that would be unneficient so it was disregarded. The bools are there to make getting the
+// information about the events much quicker.
+//
+// On the prevMvList, the next attribute is actually a pointer to the previous move, do not
+// be confused (if possible).
+typedef struct CCH_State
+{
+  CCH_Piece board[8][8];
+  CCH_Player player;
+  int round;
+  bool whiteRock;
+  bool whiteKingMoved;
+  bool blackRock;
+  bool blackKingMoved;
+  CCH_Move_List prevMvList;
+} CCH_State;
 
 #endif // INCLUDE_CCH_DEFINITIONS_H_

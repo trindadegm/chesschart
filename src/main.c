@@ -5,7 +5,7 @@
 
 int main(void)
 {
-  printf("ChessChart v0.0.1\n");  
+  printf("ChessChart v0.0.2\n");  
 
   CCH_State state;
 
@@ -25,7 +25,19 @@ int main(void)
     CCH_WHITES,
 
     // Initial round
-    0};
+    0,
+  
+    // White king made no rock
+    false,
+    // White king did not move
+    false,
+    // Black king made no rock
+    false,
+    // Black king did not move
+    false,
+  
+    // There is no previous movement (it says next, but the next is the previous (?))
+    {.next = NULL}};
 
   CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS];
 
