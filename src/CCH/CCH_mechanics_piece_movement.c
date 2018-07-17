@@ -15,6 +15,7 @@ int CCH_list_king_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_M
 
 
 // TODO ADD EN PASSANT CAPTURE ON PANW MOVES!
+// TODO ADD ROCK MOVEMENT ON KING MOVES!
 
 int CCH_is_position_inbounds(CCH_Point pos);
 int CCH_take_place_if_allowed(const CCH_State*, const CCH_Move*, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
@@ -66,10 +67,10 @@ int CCH_list_piece_moves(const CCH_State* state, int x, int y, CCH_Move moves[CC
 int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
   int it = 0;
+  CCH_Move mv;
 
   assert((x > 0 && y > 0)); // ASSERTION
 
-  CCH_Move mv;
   if (CCH_is_white(state->board[x][y])) // If the pawn is white, then
   {
     mv = (CCH_Move) {{x, y}, {x, y+1}};
@@ -249,6 +250,26 @@ int CCH_list_queen_moves(const CCH_State* state, int x, int y, CCH_Move moves[CC
 // Documentation on the heading of this file
 int CCH_list_king_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
+  int it = 0;
+  CCH_Move mv = (CCH_Move) {{x, y}, {0, 0}};
+
+  // For all the 9 squares, 8 aroung the king (and the king'ssquare)
+  for (int i = x-1; i < x+2; ++i)
+  {
+    for (int j = j-1; j < y+2; ++j)
+    {
+      if (i != x && j != y) // Ok, disregard the kings's square
+      {
+        // Try moving there
+        mv.to.x = i;
+        mv.to.y = j;
+        if (CCH_is_position_inbounds((CCH_Point) {i, j}))
+        {
+          it += CCH_take_place_if_allowed(state, &mv, it, moves);
+        }
+      } // End of if it is not on king's square
+    } // End of second for
+  } // End of first for
 }
 
 // Documentation on the heading of this file
