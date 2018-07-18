@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include <CCH/CCH_definitions.h>
 #include <CCH/CCH_mechanics.h>
@@ -7,11 +8,10 @@
 
 int main(void)
 {
-  printf("ChessChart v0.1.0\n\n");  
-
   CCH_State state;
+  bool exit = false;
 
-  // Creates a initial state
+  // Creates a initial state (standart)
   state = (CCH_State) {{
     // Initial piece positions
     {CCH_WHITE_ROOK,CCH_WHITE_PAWN,CCH_NO_PIECE,CCH_NO_PIECE,CCH_NO_PIECE,CCH_NO_PIECE,CCH_BLACK_PAWN,CCH_BLACK_ROOK},
@@ -44,9 +44,36 @@ int main(void)
   CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS];
   CCH_list_piece_moves(&state, 4, 4, moves);
 
-  print_state_board(&state);
+  printf("\tChessChart v0.1.0\n\n");
+  while (!exit)
+  {
+    char command[32];
+    int code;
 
-  // Fix the terminal color even if everything else goes wrong
-  printf("\x1b[0m");
+    printf("(cch)> ");
+    code = scanf("%31s", command);
+
+    if (strcmp(command, "exit") == 0 || code == EOF)
+    {
+      exit = true;
+    }
+    if (strcmp(command, "play") == 0)
+    {
+      code = scanf("%31s", command);
+      if (strcmp(command, "whites") == 0)
+      {
+        interface_play(&state, CCH_WHITES);
+      }
+      else if (strcmp(command, "blacks") == 0)
+      {
+        interface_play(&state, CCH_BLACKS);
+      }
+      else
+      {
+        printf("Invalid option \"%s\".\n", command);
+      }
+    }
+  }
+
   return 0;
 }

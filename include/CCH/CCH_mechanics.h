@@ -108,4 +108,10 @@ int CCH_is_white(CCH_Piece p);
 //    OR either one (or both) of them is 'CCH_NO_PIECE'
 int CCH_same_color(CCH_Piece pa, CCH_Piece pb);
 
+// TODO document
+int CCH_move_piece(CCH_State* state, CCH_Move mv);
+
+// TODO document
+int CCH_aval_simple_pos(const CCH_State*);
+
 #endif // INCLUDE_CCH_MECHANICS_H_

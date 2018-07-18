@@ -3,24 +3,26 @@
 
 #include <CCH/CCH_definitions.h>
 
-// ANSI codes used
-#define ANSI_COLOR_RESET "\x1b[0m"
-#define ANSI_COLOR_BG_BLUE "\x1b[;44"
+// These define the characters for each piece, the letters 'X' in 
+// CODED_CHESS_'X' is the one used on english chess notation (the standart
+// engligh chess notation), the string ones may be changed to any
+// other prefered notation, but the space character should be there to
+// separate the characters on the board.
+#define CODED_CHESS_P "P "
+#define CODED_CHESS_N "N "
+#define CODED_CHESS_B "B "
+#define CODED_CHESS_R "R "
+#define CODED_CHESS_Q "Q "
+#define CODED_CHESS_K "K "
 
-#define CODED_CHESS_W_P "P "
-#define CODED_CHESS_W_N "N "
-#define CODED_CHESS_W_B "B "
-#define CODED_CHESS_W_R "R "
-#define CODED_CHESS_W_Q "Q "
-#define CODED_CHESS_W_K "K "
+#define COMMAND_ARRAY_LENGTH 20
+#define COMMAND_MAX_LENGTH 128
 
-#define CODED_CHESS_B_P "P "
-#define CODED_CHESS_B_N "N "
-#define CODED_CHESS_B_B "B "
-#define CODED_CHESS_B_R "R "
-#define CODED_CHESS_B_Q "Q "
-#define CODED_CHESS_B_K "K "
-
+// print_state_board
+//
+// Uses ANSI colors to print a board on the terminal
 int print_state_board(const CCH_State*);
+
+int interface_play(const CCH_State*, CCH_Player);
 
 #endif // INCLUDE_TERMINAL_INTERFACE_H_

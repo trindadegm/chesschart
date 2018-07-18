@@ -39,7 +39,7 @@ Deps := $(patsubst $(BuildDir)/%.o, $(DepsDir)/%.d, $(Objects))
 # Making the bin depends on the objects
 $(BinDir)/$(Bin): $(Objects)
 	@mkdir -p bin
-	$(CC) $(Objects) -o $(BinDir)/$(Bin) 
+	$(CC) $(Objects) $(CFlags) $(Libs) -o $(BinDir)/$(Bin) 
 
 # Compiling each file
 $(BuildDir)/%.o: $(SourceDir)/%.$(SourceExt)

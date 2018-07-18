@@ -19,7 +19,7 @@ int CCH_list_king_moves(const CCH_State*, int x, int y, CCH_Move[CCH_MAX_PIECE_M
 
 int CCH_is_position_inbounds(CCH_Point pos);
 int CCH_take_place_if_allowed(const CCH_State*, const CCH_Move*, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
-int CCH_keep_move_in_line(const CCH_State*, CCH_Move, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
+int CCH_keep_move_in_line(const CCH_State*, int x, int y, int mvx, int mvy, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
 int CCH_keep_diagonal_move(const CCH_State*, int x, int y, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
 int CCH_keep_horizontal_move(const CCH_State*, int x, int y, int movesAt, CCH_Move[CCH_MAX_PIECE_MOVEMENTS]);
 
@@ -69,7 +69,7 @@ int CCH_list_pawn_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
   int it = 0;
   CCH_Move mv;
 
-  assert((x > 0 && y > 0)); // ASSERTION
+  assert((x > -1 && y > -1) && (x < 8 && y < 8)); // ASSERTION
 
   if (CCH_is_white(state->board[x][y])) // If the pawn is white, then
   {
@@ -256,9 +256,9 @@ int CCH_list_king_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
   // For all the 9 squares, 8 aroung the king (and the king'ssquare)
   for (int i = x-1; i < x+2; ++i)
   {
-    for (int j = j-1; j < y+2; ++j)
+    for (int j = y-1; j < y+2; ++j)
     {
-      if (i != x && j != y) // Ok, disregard the kings's square
+      if (i != x || j != y) // Ok, disregard the kings's square
       {
         // Try moving there
         mv.to.x = i;
@@ -270,6 +270,9 @@ int CCH_list_king_moves(const CCH_State* state, int x, int y, CCH_Move moves[CCH
       } // End of if it is not on king's square
     } // End of second for
   } // End of first for
+
+  moves[it] = (CCH_Move) {{-1, -1}, {-1, -1}}; // End move array
+  return 0;
 }
 
 // Documentation on the heading of this file
@@ -294,13 +297,29 @@ int CCH_is_position_inbounds(CCH_Point pos)
 }
 
 // Documentation on the heading of this file
-int CCH_keep_move_in_line(const CCH_State* state, CCH_Move mv, int movesAt, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
+int CCH_keep_move_in_line(const CCH_State* state, int x, int y, int mvx, int mvy, int movesAt,
+                          CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
-  while (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}))
+  CCH_Move mv = (CCH_Move) {{x, y}, {x+mvx, x+mvy}};
+  bool noCapture = true;
+  while (CCH_is_position_inbounds((CCH_Point) {mv.to.x, mv.to.y}) && noCapture)
   {
-    movesAt += CCH_take_place_if_allowed(state, &mv, movesAt, moves);
-    mv.to.x += mv.to.x;
-    mv.to.y += mv.to.y;
+    int place = CCH_take_place_if_allowed(state, &mv, movesAt, moves);
+    if (!CCH_same_color(state->board[x][y], state->board[mv.to.x][mv.to.y]) && state->board[mv.to.x][mv.to.y] != CCH_NO_PIECE)
+    {
+      noCapture = false; // Bacause the move is a capture now
+    }
+
+    if (place == 0) // Couldn't move
+    {
+      break;
+    }
+    else
+    {
+      ++movesAt;
+      mv.to.x += mvx;
+      mv.to.y += mvy;
+    }
   }
   return movesAt;
 }
@@ -309,10 +328,10 @@ int CCH_keep_move_in_line(const CCH_State* state, CCH_Move mv, int movesAt, CCH_
 int CCH_keep_diagonal_move(const CCH_State* state, int x, int y, int movesAt, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
   // Diagonaly move the four ways
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x+1, y+1}}, movesAt, moves);
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x+1, y-1}}, movesAt, moves);
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x-1, y+1}}, movesAt, moves);
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x-1, y-1}}, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, +1, +1, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, +1, -1, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, -1, +1, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, -1, -1, movesAt, moves);
 
   return movesAt;
 }
@@ -321,10 +340,10 @@ int CCH_keep_diagonal_move(const CCH_State* state, int x, int y, int movesAt, CC
 int CCH_keep_horizontal_move(const CCH_State* state, int x, int y, int movesAt, CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS])
 {
   // Horizontaly move the four ways
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x+1, y}}, movesAt, moves);
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x-1, y}}, movesAt, moves);
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x, y+1}}, movesAt, moves);
-  movesAt = CCH_keep_move_in_line(state, (CCH_Move) {{x, y}, {x, y-1}}, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, +1, 0, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, -1, 0, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, 0, +1, movesAt, moves);
+  movesAt = CCH_keep_move_in_line(state, x, y, 0, -1, movesAt, moves);
 
   return movesAt;
 }

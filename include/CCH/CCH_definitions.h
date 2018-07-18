@@ -65,11 +65,11 @@ typedef struct CCH_Move
 } CCH_Move;
 
 // This defines a linked list of moves
-typedef struct CCH_Move_List
+typedef struct CCH_MoveList
 {
   CCH_Move move;
-  struct CCH_Move_List* next;
-}CCH_Move_List;
+  struct CCH_MoveList* next;
+}CCH_MoveList;
 
 // This defines the state of the game, information about rocks and king movement is mandatory
 // because some movements are unavailable when some things happen on the game, even if
@@ -93,7 +93,7 @@ typedef struct CCH_State
   bool whiteKingMoved;
   bool blackRock;
   bool blackKingMoved;
-  CCH_Move_List prevMvList;
+  CCH_MoveList prevMvList;
 } CCH_State;
 
 #endif // INCLUDE_CCH_DEFINITIONS_H_
