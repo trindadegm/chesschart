@@ -1,5 +1,5 @@
-#ifndef INCLUDE_TERMINAL_INTERFACE_H_
-#define INCLUDE_TERMINAL_INTERFACE_H_
+#ifndef INCLUDE_CLI_TERMINAL_INTERFACE_H_
+#define INCLUDE_CLI_TERMINAL_INTERFACE_H_
 
 #include <CCH/CCH_definitions.h>
 
@@ -21,8 +21,8 @@
 // print_state_board
 //
 // Uses ANSI colors to print a board on the terminal
-int print_state_board(const CCH_State*);
+int CLI_print_state_board(const CCH_State*);
 
-int interface_play(const CCH_State*, CCH_Player);
+int CLI_interface_play(const CCH_State*, CCH_Player);
 
-#endif // INCLUDE_TERMINAL_INTERFACE_H_
+#endif // INCLUDE_CLI_TERMINAL_INTERFACE_H_

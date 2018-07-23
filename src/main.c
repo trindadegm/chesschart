@@ -4,7 +4,7 @@
 #include <CCH/CCH_definitions.h>
 #include <CCH/CCH_mechanics.h>
 
-#include <terminal_interface.h>
+#include <CLI/CLI_terminal_interface.h>
 
 int main(void)
 {
@@ -33,13 +33,19 @@ int main(void)
     false,
     // White king did not move
     false,
+    // No white rooks moved
+    false,
+    false,
     // Black king made no rock
     false,
     // Black king did not move
     false,
+    // No black rooks moved
+    false,
+    false,
   
-    // There is no previous movement (it says next, but the next is the previous (?))
-    {.next = NULL}};
+    // There is no movements until this point
+    NULL};
 
   CCH_Move moves[CCH_MAX_PIECE_MOVEMENTS];
   CCH_list_piece_moves(&state, 4, 4, moves);
@@ -62,11 +68,11 @@ int main(void)
       code = scanf("%31s", command);
       if (strcmp(command, "whites") == 0)
       {
-        interface_play(&state, CCH_WHITES);
+        CLI_interface_play(&state, CCH_WHITES);
       }
       else if (strcmp(command, "blacks") == 0)
       {
-        interface_play(&state, CCH_BLACKS);
+        CLI_interface_play(&state, CCH_BLACKS);
       }
       else
       {

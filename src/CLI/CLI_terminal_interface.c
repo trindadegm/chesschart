@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include <CCH/CCH_mechanics.h>
-#include <terminal_interface.h>
+#include <CLI/CLI_terminal_interface.h>
 
 char g_pieceStrArray[13][3] = 
   {CODED_CHESS_P, CODED_CHESS_N, CODED_CHESS_B, CODED_CHESS_R, CODED_CHESS_Q, CODED_CHESS_K,
@@ -10,7 +10,7 @@ char g_pieceStrArray[13][3] =
 
 // Print the state of the board
 // There are colors, for UNIX, DON'T WINDOWS-MIZE-IX THIS!
-int print_state_board(const CCH_State* state)
+int CLI_print_state_board(const CCH_State* state)
 {
   bool whiteSquare = false;
 
@@ -48,7 +48,7 @@ int print_state_board(const CCH_State* state)
   return 0;
 }
 
-int interface_play(const CCH_State* startingState, CCH_Player player)
+int CLI_interface_play(const CCH_State* startingState, CCH_Player player)
 {
   CCH_State state = *startingState; // Copy the state
   CCH_Player toPlay = CCH_WHITES; // Whites first
@@ -59,7 +59,7 @@ int interface_play(const CCH_State* startingState, CCH_Player player)
     CCH_Move mv;
     char command[32];
 
-    print_state_board(&state);
+    CLI_print_state_board(&state);
 
     if (toPlay == player)
     {
